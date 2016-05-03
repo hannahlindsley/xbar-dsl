@@ -6,9 +6,7 @@ scalaVersion := "2.11.8"
 
 (resolvers in ThisBuild) += Resolver.mavenLocal
 
-lazy val dsl = project.in(file(".")).aggregate(xbar)
-
-lazy val xbar = project.in(file("xbar")).in(file("modules"))
+lazy val dsl = project.in(file("."))
 
 resourceDirectory in Compile := baseDirectory.value / "src" / "resources"
 
