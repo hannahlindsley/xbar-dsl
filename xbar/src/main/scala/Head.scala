@@ -3,19 +3,18 @@ package dsl.xbar
 /**
  * Part of speech ADT
  */
-sealed trait POS
+sealed trait Head
 
 /**
  * Noun class
  * @param v the word
  */
-final case class N(v: String) extends POS
-
+final case class N(v: String) extends Head
 /**
  * Verb class
  * @param v the word
  */
-final case class V(v: String) extends POS
+final case class V(v: String) extends Head
 
 /**
  * Tense class
@@ -23,25 +22,25 @@ final case class V(v: String) extends POS
  * Note: This needs to be refactored, with consideration given to phrase/head movement
  * @param v the textual manifestation of the tense (like "ing" or "to")
  */
-final case class T(v: String) extends POS
+final case class T(v: String) extends Head
 
 /**
  * Adjective class
  * @param v the word
  */
-final case class J(v: String) extends POS
+final case class J(v: String) extends Head
 
 /**
  * Adverb class
  * @param v the word
  */
-final case class R(v: String) extends POS
+final case class R(v: String) extends Head
 
 /**
  * Preposition class
  * @param v the word
  */
-final case class P(v: String) extends POS
+final case class P(v: String) extends Head
 
 /**
  * Complementizer class
@@ -50,7 +49,7 @@ final case class P(v: String) extends POS
  * complementizer like "that" or empty.
  * @param v the value of the complementizer, either None or some string
  */
-final case class C(v: Option[String]) extends POS
+final case class C(v: Option[String]) extends Head
 object C {
   def apply(): C = C(None)
   def apply(v: String): C = C(Some(v))
@@ -63,7 +62,7 @@ object C {
  * determiner like "the" or "those".
  * @param v the value of the determiner, either None or some string
  */
-final case class D(v: Option[String]) extends POS
+final case class D(v: Option[String]) extends Head
 object D {
   def apply(): D = D(None)
   def apply(v: String): D = D(Some(v))
@@ -76,7 +75,7 @@ object D {
  * by an operator like "and".
  * @param v the value of the Union, either None or some string
  */
-final case class U(v: Option[String]) extends POS
+final case class U(v: Option[String]) extends Head
 object U {
   def apply(): U = U(None)
   def apply(v: String): U = U(Some(v))
