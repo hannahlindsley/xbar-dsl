@@ -22,7 +22,7 @@ final case class V(v: String) extends Head
  * Note: This needs to be refactored, with consideration given to phrase/head movement
  * @param v the textual manifestation of the tense (like "ing" or "to")
  */
-final case class T(v: String) extends Head
+final case class T(v: Tense) extends Head
 
 /**
  * Adjective class

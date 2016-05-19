@@ -2,6 +2,7 @@ package xbar
 
 import projection._
 import org.scalatest.{FunSpec, Matchers}
+import xbar.projection.Tense.Untensed
 
 /**
  * Note that the import of the projection directory is necessary for these tests to be run.
@@ -34,11 +35,12 @@ class DSLSpec extends FunSpec with Matchers {
   describe ("a noun phrase") {
 
     it ("can be complemented by a PP") {
-
+      "NP(N_(N(\"hat\"), PP(P_(P(\"with\"), DP(D_(D(\"\"), NP(N_(N(\"feathers\")))))))))" should compile
     }
 
-    it ("can be specified by nothing") {
-
+    it ("cannot have a specifier") {
+      // TODO generate random phrases of differing types to test in here
+      "NP(NP(N_(N(\"spec\"))), N_(N(\"this\")))" shouldNot compile
     }
 
     it ("can be adjoined by a UP") {
@@ -48,6 +50,22 @@ class DSLSpec extends FunSpec with Matchers {
 
   describe ("an adjective phrase") {
 
+    it ("can be adjoined on the lefthand side by an adverb phrase, but not the right") {
+//      "JP(J_(RP(R_(R(\"very\"))), J_(J(\"happy\"))))" should compile
+//      "JP(J_(J_(J(\"happy\"))), RP(R_(R(\"very\"))))" shouldNot compile
+    }
+
+    it ("can be complemented by a complementizer phrase") {
+      // example: "I'm happy for her to do it"
+//      "JP(J_(J(\"happy\"), CP(C_(C(\"for\"), TP(T_(T(Untensed), VP(DP(D_(D(\"\"), NP(N_(N(\"her\"))))), " +
+//        "V_(V(\"to do\"), DP(D_(D(\"\"), NP(N_(N(\"it\")))))))))))))" should compile
+
+      JP(J_(J("happy"), CP(C_(C("for"), TP(T_(T(Untensed), VP(DP(D_(D(""), NP(N_(N("her"))))), V_(V("to do"), DP(D_(D(""), NP(N_(N("it")))))))))))))
+    }
+
+    it ("cannot be complemented by a verb phrase") {
+
+    }
   }
 
   describe ("an adverb phrase") {}
@@ -73,9 +91,10 @@ class DSLSpec extends FunSpec with Matchers {
 
   describe ("a tense phrase") {
 
-    it ("must be complemented") {}
+    it ("must be complemented, and only be a VP") {
+      "TP(T_(T(Untensed), VP(V_(V(\"kick\")))))" should compile
+    }
 
-    it ("can only be complemented by a verb phrase") {}
   }
 
 }

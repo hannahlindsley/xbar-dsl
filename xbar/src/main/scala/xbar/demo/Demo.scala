@@ -25,9 +25,4 @@ object Demo {
 
   // "hug the tree"
   private val complementedVP = VP(V_(V("hug"), theTree))
-
-  // Examples that shouldn't work (commented out, as they don't compile):
-
-
-  // private val dpWithJPComplement = DP(D_(D("the"), JP(J_(J("happy"))))
 }

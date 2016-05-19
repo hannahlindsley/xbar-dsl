@@ -16,7 +16,7 @@ sealed trait NBarType {
 
 object NBarType {
 
-  final case class LowerNBar[X <: Phrase : CanComplementN](head: N, complement: X) extends NBarType {
+  final case class LowerNBar[X <: Phrase : CanComplementN](head: N, complement: Option[X]) extends NBarType {
     val child: Child = ChildThatIsHead(head)
     val modifier: Modifier = Complement(NComplement(complement))
   }
