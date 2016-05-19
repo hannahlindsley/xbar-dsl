@@ -1,4 +1,4 @@
-package dsl.xbar
+package xbar.projection
 
 /**
  * Part of speech ADT
