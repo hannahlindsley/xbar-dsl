@@ -45,7 +45,7 @@ object C_ {
  */
 final case class J_(v: JBT) extends Bar
 object J_ {
-  def apply(head: J): J_ = J_(JBT(LowerJBar(head)))
+  def apply(head: J): J_ = J_(JBT(LowerJBar(head, EmptyPhrase())))
   def apply[X : Phrase : CanComplementJ](head: J, complement: X): J_ = J_(JBT(LowerJBar(head, complement)))
   def apply[X : Phrase : CanAdjoinJ_](adjunct: X, main: J_): J_ = J_(JBT(UpperJBar(main, adjunct)))
 }

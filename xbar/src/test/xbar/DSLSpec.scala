@@ -2,7 +2,7 @@ package xbar
 
 import projection._
 import org.scalatest.{FunSpec, Matchers}
-import xbar.projection.Tense.Untensed
+import xbar.projection.Tense.Infinitive
 
 /**
  * Note that the import of the projection directory is necessary for these tests to be run.
@@ -60,7 +60,7 @@ class DSLSpec extends FunSpec with Matchers {
     it ("can be complemented by a complementizer phrase") {
 
       // example: "I'm happy for her to do it"
-      "JP(J_(J(\"happy\"), CP(C_(C(\"for\"), TP(T_(T(Untensed), VP(DP(D_(D(\"\"), " +
+      "JP(J_(J(\"happy\"), CP(C_(C(\"for\"), TP(T_(T(Infinitive), VP(DP(D_(D(\"\"), " +
         "NP(N_(N(\"her\"))))), V_(V(\"to do\"), DP(D_(D(\"\"), NP(N_(N(\"it\")))))))))))))" should compile
     }
 
@@ -96,7 +96,7 @@ class DSLSpec extends FunSpec with Matchers {
   describe ("a tense phrase") {
 
     it ("must be complemented, and only be a VP") {
-      "TP(T_(T(Untensed), VP(V_(V(\"kick\")))))" should compile
+      "TP(T_(T(Infinitive), VP(V_(V(\"kick\")))))" should compile
     }
 
   }
