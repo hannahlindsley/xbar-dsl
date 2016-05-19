@@ -1,6 +1,7 @@
 package xbar.modifier
 
 import xbar.modifier.types.{SpecifierType, ComplementType, AdjunctType}
+import xbar.projection.Phrase
 
 
 sealed trait Modifier

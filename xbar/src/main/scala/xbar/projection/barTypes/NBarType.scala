@@ -16,12 +16,12 @@ sealed trait NBarType {
 
 object NBarType {
 
-  final case class LowerNBar[X <: Phrase : CanComplementN](head: N, complement: Option[X]) extends NBarType {
+  final case class LowerNBar[X : Phrase : CanComplementN](head: N, complement: Option[X]) extends NBarType {
     val child: Child = ChildThatIsHead(head)
     val modifier: Modifier = Complement(NComplement(complement))
   }
 
-  final case class UpperNBar[X <: Phrase : CanAdjoinN_](bar: N_, adjunct: X) extends NBarType {
+  final case class UpperNBar[X : Phrase : CanAdjoinN_](bar: N_, adjunct: X) extends NBarType {
     val child: Child = ChildThatIsBar(bar)
     val modifier: Modifier = Adjunct(NAdjunct(adjunct))
   }

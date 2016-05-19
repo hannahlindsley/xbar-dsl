@@ -16,12 +16,12 @@ sealed trait RBarType {
 
 object RBarType {
 
-  final case class LowerRBar[X <: Phrase : CanComplementR](head: R, complement: Option[X]) extends RBarType {
+  final case class LowerRBar[X : Phrase : CanComplementR](head: R, complement: Option[X]) extends RBarType {
     val child: Child = ChildThatIsHead(head)
     val modifier: Modifier = Complement(RComplement(complement))
   }
 
-  final case class UpperRBar[X <: Phrase : CanAdjoinR_](bar: R_, adjunct: X) extends RBarType {
+  final case class UpperRBar[X : Phrase : CanAdjoinR_](bar: R_, adjunct: X) extends RBarType {
     val child: Child = ChildThatIsBar(bar)
     val modifier: Modifier = Adjunct(RAdjunct(adjunct))
   }

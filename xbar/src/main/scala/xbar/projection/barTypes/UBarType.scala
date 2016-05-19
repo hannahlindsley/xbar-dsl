@@ -16,12 +16,12 @@ sealed trait UBarType {
 
 object UBarType {
 
-  final case class LowerUBar[X <: Phrase : CanComplementU](head: U, complement: X) extends UBarType {
+  final case class LowerUBar[X : Phrase : CanComplementU](head: U, complement: X) extends UBarType {
     val child: Child = ChildThatIsHead(head)
     val modifier: Modifier = Complement(UComplement(complement))
   }
 
-  final case class UpperUBar[X <: Phrase : CanAdjoinU_](bar: U_, adjunct: X) extends UBarType {
+  final case class UpperUBar[X : Phrase : CanAdjoinU_](bar: U_, adjunct: X) extends UBarType {
     val child: Child = ChildThatIsBar(bar)
     val modifier: Modifier = Adjunct(UAdjunct(adjunct))
   }

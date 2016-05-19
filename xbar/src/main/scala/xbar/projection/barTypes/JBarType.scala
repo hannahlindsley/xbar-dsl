@@ -7,7 +7,7 @@ import xbar.modifier.Modifier.{Complement, Adjunct}
 import xbar.modifier.abilities.{CanAdjoinJ_, CanComplementJ}
 import xbar.modifier.types.AdjunctType.JAdjunct
 import xbar.modifier.types.ComplementType.JComplement
-import xbar.projection.{J, J_, Phrase}
+import xbar.projection.{NoPhrase, J, J_, Phrase}
 
 
 sealed trait JBarType {
@@ -17,16 +17,16 @@ sealed trait JBarType {
 
 object JBarType {
 
-  final case class LowerJBar[X <: Phrase : CanComplementJ](head: J, complement: Option[X]) extends JBarType {
+  final case class LowerJBar[X : Phrase : CanComplementJ](head: J, complement: Option[X]) extends JBarType {
     val child: Child = ChildThatIsHead(head)
     val modifier: Modifier = Complement(JComplement(complement))
   }
 
   object LowerJBar {
-    def apply(j: J): LowerJBar[Phrase] = LowerJBar(j, Option.empty[Phrase])
+    def apply(j: J): LowerJBar[NoPhrase] = LowerJBar(j, Option.empty[NoPhrase])
   }
 
-  final case class UpperJBar[X <: Phrase : CanAdjoinJ_](bar: J_, adjunct: X) extends JBarType {
+  final case class UpperJBar[X : Phrase : CanAdjoinJ_](bar: J_, adjunct: X) extends JBarType {
     val child: Child = ChildThatIsBar(bar)
     val modifier = Adjunct(JAdjunct(adjunct))
   }
