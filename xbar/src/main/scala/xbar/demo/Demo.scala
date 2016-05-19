@@ -3,6 +3,9 @@ package xbar.demo
 import xbar.projection._
 
 
+/**
+ * A space to play around with compilation of sentences.
+ */
 object Demo {
 
   // "tree"

@@ -1,63 +1,74 @@
 package xbar.projection
 
-import xbar.modifier.Modifier.Specifier
 import xbar.modifier.abilities._
 
+
 /**
- * Any phrase
+ * Implementing the Phrase type class allows you to define a projection and specifier of a particular class
+ * @tparam X a type that can be phrased with a projection and optional specifier
  */
 trait Phrase[X] {
+  
   type S
   type B
-  def make(bar: B, spec: Option[S]): X
+  
+  def phrase(bar: B, spec: Option[S]): X
 }
 
 object Phrase {
 
-  implicit def emptyCanComplementV[X]: CanComplementV[Phrase[X]] = new CanComplementV[Phrase[X]] {}
-  implicit def emptyCanComplementN[X]: CanComplementN[Phrase[X]] = new CanComplementN[Phrase[X]] {}
-  implicit def emptyCanComplementJ[X]: CanComplementJ[Phrase[X]] = new CanComplementJ[Phrase[X]] {}
-  implicit def emptyCanComplementR[X]: CanComplementR[Phrase[X]] = new CanComplementR[Phrase[X]] {}
-  implicit def emptyCanSpecifyV[X]: CanSpecifyV[Phrase[X]] = new CanSpecifyV[Phrase[X]] {}
-  implicit def emptyCanSpecifyN[X]: CanSpecifyN[Phrase[X]] = new CanSpecifyN[Phrase[X]] {}
-  implicit def emptyCanSpecifyD[X]: CanSpecifyD[Phrase[X]] = new CanSpecifyD[Phrase[X]] {}
-  implicit def emptyCanSpecifyP[X]: CanSpecifyP[Phrase[X]] = new CanSpecifyP[Phrase[X]] {}
-  implicit def emptyCanSpecifyU[X]: CanSpecifyU[Phrase[X]] = new CanSpecifyU[Phrase[X]] {}
-  implicit def emptyCanSpecifyR[X]: CanSpecifyR[Phrase[X]] = new CanSpecifyR[Phrase[X]] {}
-  implicit def emptyCanSpecifyJ[X]: CanSpecifyJ[Phrase[X]] = new CanSpecifyJ[Phrase[X]] {}
-  implicit def emptyCanSpecifyT[X]: CanSpecifyT[Phrase[X]] = new CanSpecifyT[Phrase[X]] {}
-  implicit def emptyCanSpecifyC[X]: CanSpecifyC[Phrase[X]] = new CanSpecifyC[Phrase[X]] {}
+//  implicit def emptyCanComplementV[X : Phrase]: CanComplementV[Phrase[X]] = new CanComplementV[Phrase[X]] {}
+//  implicit def emptyCanComplementN[X : Phrase]: CanComplementN[Phrase[X]] = new CanComplementN[Phrase[X]] {}
+//  implicit def emptyCanComplementJ[X : Phrase]: CanComplementJ[Phrase[X]] = new CanComplementJ[Phrase[X]] {}
+//  implicit def emptyCanComplementR[X : Phrase]: CanComplementR[Phrase[X]] = new CanComplementR[Phrase[X]] {}
+//  implicit def emptyCanSpecifyV[X : Phrase]: CanSpecifyV[Phrase[X]] = new CanSpecifyV[Phrase[X]] {}
+//  implicit def emptyCanSpecifyN[X : Phrase]: CanSpecifyN[Phrase[X]] = new CanSpecifyN[Phrase[X]] {}
+//  implicit def emptyCanSpecifyD[X : Phrase]: CanSpecifyD[Phrase[X]] = new CanSpecifyD[Phrase[X]] {}
+//  implicit def emptyCanSpecifyP[X : Phrase]: CanSpecifyP[Phrase[X]] = new CanSpecifyP[Phrase[X]] {}
+//  implicit def emptyCanSpecifyU[X]: CanSpecifyU[Phrase[X]] = new CanSpecifyU[Phrase[X]] {}
+//  implicit def emptyCanSpecifyR[X]: CanSpecifyR[Phrase[X]] = new CanSpecifyR[Phrase[X]] {}
+//  implicit def emptyCanSpecifyJ[X]: CanSpecifyJ[Phrase[X]] = new CanSpecifyJ[Phrase[X]] {}
+//  implicit def emptyCanSpecifyT[X]: CanSpecifyT[Phrase[X]] = new CanSpecifyT[Phrase[X]] {}
+//  implicit def emptyCanSpecifyC[X]: CanSpecifyC[Phrase[X]] = new CanSpecifyC[Phrase[X]] {}
 }
 
-trait NoPhrase
-object NoPhrase {
+/**
+ * Used for type class implementation to identify which modifiers can be empty.
+ * If a particular modifier cannot be empty (Complement of Determiner, for example), there will
+ * be no implicit object for it for EmptyPhrase.
+ */
+trait EmptyPhrase
 
-  implicit def phraseNoPhrase: Phrase[NoPhrase] = new Phrase[NoPhrase] {
+object EmptyPhrase {
 
-    override type S = NoPhrase
-    override type B = NoPhrase
+  def apply(): EmptyPhrase = new EmptyPhrase {}
 
-    override def make(bar: B, spec: Option[S]) = new NoPhrase {}
+  implicit def phraseNoPhrase: Phrase[EmptyPhrase] = new Phrase[EmptyPhrase] {
+
+    override type S = EmptyPhrase
+    override type B = EmptyPhrase
+
+    override def phrase(bar: B, spec: Option[S]) = new EmptyPhrase {}
   }
 
-  implicit def noModifierNComplement: CanComplementN[NoPhrase] = new CanComplementN[NoPhrase] {}
-  implicit def noModifierDSpecifier: CanSpecifyD[NoPhrase] = new CanSpecifyD[NoPhrase] {}
-  implicit def noModifierVComplement: CanComplementV[NoPhrase] = new CanComplementV[NoPhrase] {}
-  implicit def noModifierUSpecifier: CanSpecifyU[NoPhrase] = new CanSpecifyU[NoPhrase] {}
-  implicit def noModifierUComplement: CanComplementU[NoPhrase] = new CanComplementU[NoPhrase] {}
-  implicit def noModifierTSpecifier: CanSpecifyT[NoPhrase] = new CanSpecifyT[NoPhrase] {}
-  implicit def noModifierTComplement: CanComplementT[NoPhrase] = new CanComplementT[NoPhrase] {}
-  implicit def noModifierRSpecifier: CanSpecifyR[NoPhrase] = new CanSpecifyR[NoPhrase] {}
-  implicit def noModifierRComplement: CanComplementR[NoPhrase] = new CanComplementR[NoPhrase] {}
-  implicit def noModifierJSpecifier: CanSpecifyJ[NoPhrase] = new CanSpecifyJ[NoPhrase] {}
-  implicit def noModifierJComplement: CanComplementJ[NoPhrase] = new CanComplementJ[NoPhrase] {}
-  implicit def noModifierCSpecifier: CanSpecifyC[NoPhrase] = new CanSpecifyC[NoPhrase] {}
-  implicit def noModifierCComplement: CanComplementC[NoPhrase] = new CanComplementC[NoPhrase] {}
-  implicit def noModifierCanSpecifyN: CanSpecifyN[NoPhrase] = new CanSpecifyN[NoPhrase] {}
-  implicit def noModifierPSpecifier: CanSpecifyP[NoPhrase] = new CanSpecifyP[NoPhrase] {}
-  implicit def noModifierPComplement: CanComplementP[NoPhrase] = new CanComplementP[NoPhrase] {}
-  implicit def noModifierDComplement: CanComplementD[NoPhrase] = new CanComplementD[NoPhrase] {}
-  implicit def noModifierVSpecifier: CanSpecifyV[NoPhrase] = new CanSpecifyV[NoPhrase] {}
+  implicit def noModifierNComplement: CanComplementN[EmptyPhrase] = new CanComplementN[EmptyPhrase] {}
+  implicit def noModifierDSpecifier: CanSpecifyD[EmptyPhrase] = new CanSpecifyD[EmptyPhrase] {}
+  implicit def noModifierVComplement: CanComplementV[EmptyPhrase] = new CanComplementV[EmptyPhrase] {}
+  implicit def noModifierUSpecifier: CanSpecifyU[EmptyPhrase] = new CanSpecifyU[EmptyPhrase] {}
+  implicit def noModifierUComplement: CanComplementU[EmptyPhrase] = new CanComplementU[EmptyPhrase] {}
+  implicit def noModifierTSpecifier: CanSpecifyT[EmptyPhrase] = new CanSpecifyT[EmptyPhrase] {}
+  implicit def noModifierTComplement: CanComplementT[EmptyPhrase] = new CanComplementT[EmptyPhrase] {}
+  implicit def noModifierRSpecifier: CanSpecifyR[EmptyPhrase] = new CanSpecifyR[EmptyPhrase] {}
+  implicit def noModifierRComplement: CanComplementR[EmptyPhrase] = new CanComplementR[EmptyPhrase] {}
+  implicit def noModifierJSpecifier: CanSpecifyJ[EmptyPhrase] = new CanSpecifyJ[EmptyPhrase] {}
+  implicit def noModifierJComplement: CanComplementJ[EmptyPhrase] = new CanComplementJ[EmptyPhrase] {}
+  implicit def noModifierCSpecifier: CanSpecifyC[EmptyPhrase] = new CanSpecifyC[EmptyPhrase] {}
+  implicit def noModifierCComplement: CanComplementC[EmptyPhrase] = new CanComplementC[EmptyPhrase] {}
+  implicit def noModifierCanSpecifyN: CanSpecifyN[EmptyPhrase] = new CanSpecifyN[EmptyPhrase] {}
+  implicit def noModifierPSpecifier: CanSpecifyP[EmptyPhrase] = new CanSpecifyP[EmptyPhrase] {}
+  implicit def noModifierPComplement: CanComplementP[EmptyPhrase] = new CanComplementP[EmptyPhrase] {}
+  implicit def noModifierDComplement: CanComplementD[EmptyPhrase] = new CanComplementD[EmptyPhrase] {}
+  implicit def noModifierVSpecifier: CanSpecifyV[EmptyPhrase] = new CanSpecifyV[EmptyPhrase] {}
 
 }
 
@@ -72,14 +83,14 @@ final case class NP[X : Phrase : CanSpecifyN](bar: N_, spec: Option[X])
 
 object NP {
 
-  def apply(bar: N_): NP[NoPhrase] = NP(bar, Option.empty[NoPhrase])
+  def apply(bar: N_): NP[EmptyPhrase] = NP(bar, Option.empty[EmptyPhrase])
 
   implicit def npDComplement[X : Phrase : CanSpecifyN]: CanComplementD[NP[X]] = new CanComplementD[NP[X]] {}
 
   implicit def phraseNP[X : Phrase : CanSpecifyN]: Phrase[NP[X]] = new Phrase[NP[X]] {
     override type S = X
     override type B = N_
-    override def make(bar: N_, spec: Option[X]): NP[X] = NP(bar, spec)
+    override def phrase(bar: N_, spec: Option[X]): NP[X] = NP(bar, spec)
   }
 
 }
@@ -95,7 +106,7 @@ final case class PP[X : Phrase : CanSpecifyP](bar: P_, spec: Option[X])
 
 object PP {
 
-  def apply(bar: P_): PP[NoPhrase] = PP(bar, Option.empty[NoPhrase])
+  def apply(bar: P_): PP[EmptyPhrase] = PP(bar, Option.empty[EmptyPhrase])
 
   implicit def phrasePP[X : Phrase : CanSpecifyP]: Phrase[PP[X]] = new Phrase[PP[X]] {
 
@@ -103,7 +114,7 @@ object PP {
 
     override type B = P_
 
-    override def make(bar: P_, spec: Option[X]) = PP(bar, spec)
+    override def phrase(bar: P_, spec: Option[X]) = PP(bar, spec)
 
   }
 
@@ -115,7 +126,7 @@ final case class VP[X : Phrase : CanSpecifyV](bar: V_, spec: Option[X])
 
 object VP {
 
-  def apply(bar: V_): VP[NoPhrase] = VP(bar, Option.empty[NoPhrase])
+  def apply(bar: V_): VP[EmptyPhrase] = VP(bar, Option.empty[EmptyPhrase])
 
   def apply[X : Phrase : CanSpecifyV](spec: X, bar: V_): VP[X] = VP(bar, Some(spec))
 
@@ -125,13 +136,11 @@ object VP {
 
     override type B = V_
 
-    override def make(bar: V_, spec: Option[X]) = VP(bar, spec)
+    override def phrase(bar: V_, spec: Option[X]) = VP(bar, spec)
 
   }
 
   implicit def vpCanComplementT[X : Phrase : CanSpecifyV]: CanComplementT[VP[X]] = new CanComplementT[VP[X]] {}
-
-  implicit def vpCanComplementJ[X : Phrase : CanSpecifyV]: CanComplementJ[VP[X]] = new CanComplementJ[VP[X]] {}
 
 }
 
@@ -139,7 +148,7 @@ final case class CP[X : Phrase : CanSpecifyC](bar: C_, spec: Option[X])
 
 object CP {
 
-  def apply(bar: C_): CP[NoPhrase] = CP(bar, Option.empty[NoPhrase])
+  def apply(bar: C_): CP[EmptyPhrase] = CP(bar, Option.empty[EmptyPhrase])
 
   implicit def phraseCP[X : Phrase : CanSpecifyC]: Phrase[CP[X]] = new Phrase[CP[X]] {
 
@@ -147,7 +156,7 @@ object CP {
 
     override type B = C_
 
-    override def make(bar: C_, spec: Option[X]) = CP(bar, spec)
+    override def phrase(bar: C_, spec: Option[X]) = CP(bar, spec)
 
   }
 
@@ -159,7 +168,7 @@ final case class TP[X : Phrase : CanSpecifyT](bar: T_, spec: Option[X])
 
 object TP {
 
-  def apply(bar: T_): TP[NoPhrase] = TP(bar, Option.empty[NoPhrase])
+  def apply(bar: T_): TP[EmptyPhrase] = TP(bar, Option.empty[EmptyPhrase])
 
   implicit def phraseTP[X : Phrase : CanSpecifyT]: Phrase[TP[X]] = new Phrase[TP[X]] {
 
@@ -167,7 +176,7 @@ object TP {
 
     override type B = T_
 
-    override def make(bar: T_, spec: Option[X]) = TP(bar, spec)
+    override def phrase(bar: T_, spec: Option[X]) = TP(bar, spec)
 
   }
 
@@ -181,11 +190,11 @@ object JP {
 
   implicit def phraseJP: Phrase[JP] = new Phrase[JP] {
 
-    override type S = NoPhrase
+    override type S = EmptyPhrase
 
     override type B = J_
 
-    override def make(bar: J_, spec: Option[NoPhrase] = None) = JP(bar)
+    override def phrase(bar: J_, spec: Option[EmptyPhrase]) = JP(bar)
 
   }
 
@@ -197,7 +206,7 @@ final case class RP[X : Phrase : CanSpecifyR](bar: R_, spec: Option[X])
 
 object RP {
 
-  def apply(bar: R_): RP[NoPhrase] = RP(bar, Option.empty[NoPhrase])
+  def apply(bar: R_): RP[EmptyPhrase] = RP(bar, Option.empty[EmptyPhrase])
 
   implicit def phraseRP[X : Phrase : CanSpecifyR]: Phrase[RP[X]] = new Phrase[RP[X]] {
 
@@ -205,7 +214,7 @@ object RP {
 
     override type B = R_
 
-    override def make(bar: R_, spec: Option[X]) = RP(bar, spec)
+    override def phrase(bar: R_, spec: Option[X]) = RP(bar, spec)
 
   }
 
@@ -219,7 +228,7 @@ final case class DP[X : Phrase : CanSpecifyD](bar: D_, spec: Option[X])
 
 object DP {
 
-  def apply(bar: D_): DP[NoPhrase] = DP(bar, Option.empty[NoPhrase])
+  def apply(bar: D_): DP[EmptyPhrase] = DP(bar, Option.empty[EmptyPhrase])
 
   def apply[X : Phrase : CanSpecifyD](spec: X, bar: D_): DP[X] = DP(bar, Some(spec))
   
@@ -229,7 +238,7 @@ object DP {
     
     override type B = D_
     
-    override def make(bar: D_, spec: Option[X]) = DP(bar, spec)
+    override def phrase(bar: D_, spec: Option[X]) = DP(bar, spec)
     
   }
 
@@ -248,7 +257,7 @@ final case class UP[X : Phrase : CanSpecifyU](bar: U_, spec: Option[X])
 
 object UP {
 
-  def apply(bar: U_): UP[NoPhrase] = UP(bar, Option.empty[NoPhrase])
+  def apply(bar: U_): UP[EmptyPhrase] = UP(bar, Option.empty[EmptyPhrase])
 
   implicit def phraseUP[X : Phrase : CanSpecifyU]: Phrase[UP[X]] = new Phrase[UP[X]] {
 
@@ -256,7 +265,7 @@ object UP {
 
     override type B = U_
 
-    override def make(bar: U_, spec: Option[X]) = UP(bar, spec)
+    override def phrase(bar: U_, spec: Option[X]) = UP(bar, spec)
 
   }
 

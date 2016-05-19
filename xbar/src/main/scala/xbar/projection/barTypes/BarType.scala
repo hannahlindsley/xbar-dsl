@@ -23,6 +23,4 @@ object BarType {
 
   final case class TBT(v: TBarType) extends BarType
 
-  case object EmptyBarType extends BarType
-
 }

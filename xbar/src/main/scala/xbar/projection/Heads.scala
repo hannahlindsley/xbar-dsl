@@ -10,6 +10,7 @@ sealed trait Head
  * @param v the word
  */
 final case class N(v: String) extends Head
+
 /**
  * Verb class
  * @param v the word
@@ -20,7 +21,7 @@ final case class V(v: String) extends Head
  * Tense class
  *
  * Note: This needs to be refactored, with consideration given to phrase/head movement
- * @param v the textual manifestation of the tense (like "ing" or "to")
+ * @param v tense, such as Untensed, Present, or Future
  */
 final case class T(v: Tense) extends Head
 

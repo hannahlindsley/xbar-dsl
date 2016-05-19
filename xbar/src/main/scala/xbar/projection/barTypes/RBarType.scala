@@ -16,7 +16,7 @@ sealed trait RBarType {
 
 object RBarType {
 
-  final case class LowerRBar[X : Phrase : CanComplementR](head: R, complement: Option[X]) extends RBarType {
+  final case class LowerRBar[X : Phrase : CanComplementR](head: R, complement: X) extends RBarType {
     val child: Child = ChildThatIsHead(head)
     val modifier: Modifier = Complement(RComplement(complement))
   }
