@@ -26,10 +26,11 @@ class DSLSpec extends FunSpec with Matchers {
       "DP(D_(D(\"the\"))))" shouldNot compile
     }
 
-    it ("should be specifiable only by a determiner phrase") {
+    it ("should be specifiable only by a genitive determiner phrase") {
 
       //TODO: generate random other phrases and ensure that they do not compile
       "DP(DP(D_(D(\"\"), NP(N_(N(\"Hannah\"))))), D_(D(\"'s\"), NP(N_(N(\"cat\")))))" should compile
+      "DP(DP(D_(D(\"the\"), NP(N_(N(\"cat\"))))), D_(D(\"the\"), NP(N_(N(\"dog\")))))" shouldNot compile
     }
   }
 
