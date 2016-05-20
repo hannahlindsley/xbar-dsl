@@ -1,4 +1,4 @@
-package xbar.demo
+package xbar.playground
 
 import xbar.projection._
 
@@ -6,7 +6,7 @@ import xbar.projection._
 /**
  * A space to play around with compilation of sentences.
  */
-object Demo {
+object Playground {
 
   // "tree"
   private val tree: N = N("tree")
