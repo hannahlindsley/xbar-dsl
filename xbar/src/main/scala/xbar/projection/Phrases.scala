@@ -1,6 +1,10 @@
 package xbar.projection
 
 import xbar.modifier.abilities._
+import xbar.projection.EmptyPhrase
+import xbar.projection.barTypes.DBarType.{UpperDBar, LowerDBar}
+
+import scala.annotation.tailrec
 
 
 /**
@@ -37,8 +41,6 @@ object EmptyPhrase {
 
   implicit def noModifierNComplement: CanComplementN[EmptyPhrase] = new CanComplementN[EmptyPhrase] {}
   
-  implicit def noModifierDSpecifier: CanSpecifyD[EmptyPhrase] = new CanSpecifyD[EmptyPhrase] {}
-  
   implicit def noModifierVComplement: CanComplementV[EmptyPhrase] = new CanComplementV[EmptyPhrase] {}
   
   implicit def noModifierUSpecifier: CanSpecifyU[EmptyPhrase] = new CanSpecifyU[EmptyPhrase] {}
@@ -70,6 +72,10 @@ object EmptyPhrase {
   implicit def noModifierDComplement: CanComplementD[EmptyPhrase] = new CanComplementD[EmptyPhrase] {}
   
   implicit def noModifierVSpecifier: CanSpecifyV[EmptyPhrase] = new CanSpecifyV[EmptyPhrase] {}
+
+  implicit def noModifierGenitiveSpecifier: CanSpecifyGenitive[EmptyPhrase] = new CanSpecifyGenitive[EmptyPhrase] {
+    override val isEmpty: Boolean = true
+  }
 
 }
 
@@ -273,42 +279,51 @@ object RP {
 
 }
 
-/**
- * Determiner Phrase
- *
- * Ex: "the dog" in "the dog is hungry"
- *
- * @param bar bar projection of DP
- * @param spec specifier to DP
- * @tparam X specifier type
- */
-final case class DP[X : Phrase : CanSpecifyD](bar: D_, spec: X)
+final case class DP(ty: DPType)
 
 object DP {
 
-  def apply(bar: D_): DP[EmptyPhrase] = DP(bar, EmptyPhrase())
+  def apply(bar: D_): DP = DP(bar, EmptyPhrase())
 
-  def apply[X : Phrase : CanSpecifyD](spec: X, bar: D_): DP[X] = DP(bar, spec)
-  
-  implicit def phraseDP[X : Phrase : CanSpecifyD]: Phrase[DP[X]] = new Phrase[DP[X]] {
+  def apply(bar: D_, spec: EmptyPhrase): DP = DP(EmptyPhrase(), bar)
 
-    override type S = X
-    
-    override type B = D_
-    
-    override def phrase(bar: D_, spec: X) = DP(bar, spec)
-    
+  def apply[X : Phrase : CanSpecifyGenitive](spec: X, bar: D_): DP = {
+
+    if (implicitly[CanSpecifyGenitive[X]] isEmpty) {
+
+      @tailrec
+      def check(b: D_): DP = {
+        bar.v.v match {
+          case LowerDBar(x, y) => x.d match {
+            case Det(_) => DP(RegularDP(b))
+            case Genitive(_) => DP(GenitiveDP(spec, bar))
+          }
+          case UpperDBar(x, y) => check(x)
+        }
+      }
+
+      check(bar)
+    }
+
+    else DP(GenitiveDP(spec, bar))
   }
 
-  implicit def dpPComplement[X : Phrase : CanSpecifyD]: CanComplementP[DP[X]] = new CanComplementP[DP[X]] {}
 
-  // DPs are the only phrases that can specify another DP, and only then in the case of genitive markings.
-  implicit def dpDPSpecifier[X : Phrase : CanSpecifyD]: CanSpecifyD[DP[X]] = new CanSpecifyD[DP[X]] {}
+  implicit def phraseDP: Phrase[DP] = new Phrase[DP] {
 
-  implicit def dpVComplement[X : Phrase : CanSpecifyD]: CanComplementV[DP[X]] = new CanComplementV[DP[X]] {}
+    override type S = EmptyPhrase
 
-  implicit def dpCanSpecifyV[X : Phrase : CanSpecifyD]: CanSpecifyV[DP[X]] = new CanSpecifyV[DP[X]] {}
+    override type B = D_
 
+    override def phrase(bar: D_, spec: EmptyPhrase) = DP(bar, spec)
+
+  }
+
+  implicit def dpPComplement: CanComplementP[DP] = new CanComplementP[DP] {}
+
+  implicit def dpVComplement: CanComplementV[DP] = new CanComplementV[DP] {}
+
+  implicit def dpCanSpecifyV: CanSpecifyV[DP] = new CanSpecifyV[DP] {}
 }
 
 /**
@@ -340,3 +355,21 @@ object UP {
   }
 
 }
+sealed trait DPType
+
+final case class GenitiveDP[X : Phrase : CanSpecifyGenitive](spec: X, bar: D_) extends DPType
+
+object GenitiveDP {
+
+  implicit def phraseGenitive[X : Phrase : CanSpecifyGenitive]: Phrase[GenitiveDP[X]] = new Phrase[GenitiveDP[X]] {
+
+    override type S = X
+
+    override type B = D_
+
+    override def phrase(bar: D_, spec: X) = GenitiveDP(spec, bar)
+  }
+
+}
+
+final case class RegularDP(bar: D_) extends DPType

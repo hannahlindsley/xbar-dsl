@@ -6,7 +6,7 @@ import xbar.modifier.Modifier.{Complement, Adjunct}
 import xbar.modifier.abilities.{CanAdjoinD_, CanComplementD}
 import xbar.modifier.types.AdjunctType.DAdjunct
 import xbar.modifier.types.ComplementType.DComplement
-import xbar.projection.{Phrase, D, D_}
+import xbar.projection._
 
 
 sealed trait DBarType {
@@ -25,5 +25,6 @@ object DBarType {
     val child: Child = ChildThatIsBar(bar)
     val modifier: Modifier = Adjunct(DAdjunct(adjunct))
   }
-
 }
+
+

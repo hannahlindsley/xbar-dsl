@@ -5,6 +5,11 @@ package xbar.projection
  */
 sealed trait Head
 
+
+sealed trait Determiner
+final case class Genitive(v: String) extends Determiner
+final case class Det(v: Option[String]) extends Determiner
+
 /**
  * Noun class
  * @param v the word
@@ -61,12 +66,15 @@ object C {
  *
  * Determiners can be null, as in "* Dogs with sweaters," where the star can either be empty or filled by a
  * determiner like "the" or "those".
- * @param v the value of the determiner, either None or some string
+ * @param d the value of the determiner, either None or some string
  */
-final case class D(v: Option[String]) extends Head
+final case class D(d: Determiner) extends Head
 object D {
-  def apply(): D = D(None)
-  def apply(v: String): D = D(Some(v))
+  def apply(): D = D(Det(None))
+  def apply(v: String): D = v match {
+    case "'s" => D(Genitive(v))
+    case _ => D(Det(Some(v)))
+  }
 }
 
 /**

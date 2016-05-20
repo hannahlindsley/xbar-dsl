@@ -24,6 +24,6 @@ object SpecifierType {
 
   final case class CSpecifier[X : Phrase : CanSpecifyC](x: X) extends SpecifierType
 
-  final case class DSpecifier[X : Phrase : CanSpecifyD](x: X) extends SpecifierType
+  final case class DSpecifier[X : Phrase : CanSpecifyGenitive](x: X) extends SpecifierType
 
 }

@@ -1,7 +1,5 @@
 package xbar.role
 
-import scalaz.Show
-
 
 sealed trait GrammaticalRole
 

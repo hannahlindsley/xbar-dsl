@@ -15,7 +15,7 @@ object Demo {
   private val treeNP = NP(N_(tree))
 
   // "the tree"
-  private val theTree = DP(D_(D("the"), treeNP))
+  private val theTree: DP = DP(D_(D("the"), treeNP))
 
   // "of life"
   private val pp = PP(P_(P("of"), DP(D_(D(), NP(N_(N("life")))))))
